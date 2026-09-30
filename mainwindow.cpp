@@ -15,17 +15,21 @@ MainWindow::MainWindow(QWidget *parent)
     ui->dateTimeEdit->setDateTime(QDateTime(QDate(2026, 7, 1),
                                             QTime(0, 0, 0)));
 
+    ui->radioButton_GPIO->hide();
+    ui->radioButton_delayLog->hide();
+    ui->spinBox_delayLog->hide();
+
 
     ui->spinBox_logTime->setRange(INT_MIN, INT_MAX);
     ui->spinBox_samplingfrequency->setRange(INT_MIN, INT_MAX);
-    ui->spinBox_delayLog->setRange(INT_MIN, INT_MAX);
+   // ui->spinBox_delayLog->setRange(INT_MIN, INT_MAX);
 
     ui->spinBox_fftStartTime->setRange(INT_MIN, INT_MAX);
     ui->spinBox_fftEndTime->setRange(INT_MIN, INT_MAX);
 
     ui->spinBox_logTime->setToolTip("Enter value from 1 to 65535");
     ui->spinBox_samplingfrequency->setToolTip("Enter value from 1 to 10000");
-    ui->spinBox_delayLog->setToolTip("Enter value from 1 to 65535");
+  //  ui->spinBox_delayLog->setToolTip("Enter value from 1 to 65535");
 
 
     connect(ui->pushButton_clear,&QPushButton::clicked,ui->textEdit_rawBytes,&QTextEdit::clear);
@@ -1820,14 +1824,35 @@ void MainWindow::showGuiData(const QByteArray &byteArrayData)
                 }
 
                 QByteArray packet2048 =
-                        data.mid(
-                            i,
-                            footerPos - i + 3);
-                if(packet2048.size()<2048)
-                {
+                                      data.mid(
+                                          i,
+                                          2058);
+                writeToNotes(" complete packet with size:"+QString::number(packet2048.size()));
+                writeToNotes(" complete packet:"+packet2048.toHex());
 
-                    writeToNotes("packet with invalid size:"+packet2048.toHex());
-                }
+//                QByteArray packet2048 =
+//                        data.mid(
+//                            i,
+//                            footerPos - i + 3);
+//                bool isP=false;
+
+//                int count=0;
+//                QByteArray invalid_pack;
+
+//                if(packet2048.size()<2048)
+//                {
+//                    invalid_pack=data.mid(i,2058);
+//                    isP=true;
+
+
+
+//                    writeToNotes("packet with invalid size:"+invalid_pack.toHex());
+//                }
+//                if(isP and count<3)
+//                {
+//                    count++;
+//                     writeToNotes("packet  after ivalid"+packet2048.toHex());
+//                }
 
                 // FF Filtering is removed now @29Aug2026 for DSVDL project
                 //                // ---------------------------------------------
@@ -1930,7 +1955,7 @@ void MainWindow::showGuiData(const QByteArray &byteArrayData)
                 }
 
 
-                i = footerPos + 3;
+                i += 2058 ;
                 continue;
             }
 
@@ -2238,7 +2263,7 @@ void MainWindow::showGuiData(const QByteArray &byteArrayData)
     //msg Id = 0x06
     else if (data.startsWith("PARAM"))
     {
-        QByteArray payload = data.mid(8, 20);
+        QByteArray payload = data.mid(8, 22);
 
         quint8 sNo = static_cast<quint8>(payload[0]);
 
@@ -2284,31 +2309,35 @@ void MainWindow::showGuiData(const QByteArray &byteArrayData)
         quint16 delayTime =
                 (static_cast<quint8>(payload[18]) << 8) |
                  static_cast<quint8>(payload[19]);
+        quint16 threshold =
+                (static_cast<quint8>(payload[20]) << 8) |
+                static_cast<quint8>(payload[21]);
 
         ui->spinBox_unitNumber->setValue(sNo);
         ui->spinBox_logTime->setValue(logTime);
 
         ui->spinBox_samplingfrequency->setValue(samplingFreq);
+        ui->doubleSpinBox_threshold->setValue(threshold);
         // For Live Plot X-axis label
         this->accFrequency = samplingFreq;
 
         ui->doubleSpinBox_availableStorage->setValue(availableStorage);
 
-        ui->spinBox_delayLog->setValue(delayTime);
+     //   ui->spinBox_delayLog->setValue(delayTime);
 
         if(loginMode == static_cast<quint8>(0xAB))
-            ui->radioButton_powerON->setChecked(true);
+            ui->checkBox_powerOnLog->setChecked(true);
 
-        if(loginMode == static_cast<quint8>(0xAF))
-            ui->radioButton_GPIO->setChecked(true);
+//        if(loginMode == static_cast<quint8>(0xAF))
+//            ui->radioButton_GPIO->setChecked(true);
 
-        if(loginMode == static_cast<quint8>(0xAE))
-            ui->radioButton_delayLog->setChecked(true);
+//        if(loginMode == static_cast<quint8>(0xAE))
+//            ui->radioButton_delayLog->setChecked(true);
 
         blinkWidget(ui->spinBox_logTime);
         blinkWidget(ui->spinBox_samplingfrequency);
         blinkWidget(ui->spinBox_unitNumber);
-        blinkWidget(ui->spinBox_delayLog);
+   //     blinkWidget(ui->spinBox_delayLog);
 
         if (requiredPages >= availablePages)
         {
@@ -4848,15 +4877,15 @@ void MainWindow::on_pushButton_openFiles_clicked()
 void MainWindow::on_pushButton_setCurrentParameters_clicked()
 {
 
-    if(ui->radioButton_delayLog->isChecked())
-    {
-        if(ui->spinBox_delayLog->value()>65535||ui->spinBox_delayLog->value()<1){
-            QTimer::singleShot(0, this, [this](){
-                QMessageBox::information(this,"Out Of Range","Enter the value between 1 and 65535 for delay log");
-            });
-            return;
-        }
-    }
+//    if(ui->radioButton_delayLog->isChecked())
+//    {
+//        if(ui->spinBox_delayLog->value()>65535||ui->spinBox_delayLog->value()<1){
+//            QTimer::singleShot(0, this, [this](){
+//                QMessageBox::information(this,"Out Of Range","Enter the value between 1 and 65535 for delay log");
+//            });
+//            return;
+//        }
+//    }
 
     if(ui->spinBox_logTime->value()>65535||ui->spinBox_logTime->value()<1){
         QTimer::singleShot(0, this, [this](){
@@ -4911,31 +4940,31 @@ void MainWindow::on_pushButton_setCurrentParameters_clicked()
     command.append(static_cast<quint8>(year - 2000)); // if protocol needs 2-digit year 14
 
     quint8 mode = static_cast<quint8>(0x00);
-    if(ui->radioButton_powerON->isChecked())
+    if(ui->checkBox_powerOnLog->isChecked())
     {
         mode = 0xAB;
     }
 
-    if(ui->radioButton_GPIO->isChecked())
-    {
-        mode = 0xAF;
-    }
+//    if(ui->radioButton_GPIO->isChecked())
+//    {
+//        mode = 0xAF;
+//    }
 
-    if(ui->radioButton_delayLog->isChecked())
-    {
-        mode = 0xAE;
-    }
+//    if(ui->radioButton_delayLog->isChecked())
+//    {
+//        mode = 0xAE;
+//    }
 
     command.append(static_cast<quint8>(mode)); // 15
 
     quint16 delayTime = 0x0000;
 
-    if(ui->radioButton_delayLog->isChecked())
-    {
-        delayTime =
-                static_cast<quint16>(
-                    ui->spinBox_delayLog->value());
-    }
+//    if(ui->radioButton_delayLog->isChecked())
+//    {
+//        delayTime =
+//                static_cast<quint16>(
+//                    ui->spinBox_delayLog->value());
+//    }
 
     // MSB first
     command.append(
@@ -4943,6 +4972,11 @@ void MainWindow::on_pushButton_setCurrentParameters_clicked()
 
     command.append(
         static_cast<quint8>(delayTime & 0xFF));          // 17
+
+    quint16 threshold = ui->doubleSpinBox_threshold->value();
+    command.append(static_cast<quint8>((threshold >> 8) & 0xFF)); //MSB 5
+    command.append(static_cast<quint8>(threshold & 0xFF)); //LSB 6
+
 
     command.append(static_cast<quint8>(0xEE));           // 18
     command.append(static_cast<quint8>(0xFF));           // 19

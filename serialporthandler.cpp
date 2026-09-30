@@ -268,8 +268,8 @@ void serialPortHandler::readData()
             powerId = 0x01;
             ResponseData = buffer;
             buffer.clear();
-            executeWriteToNotes("Get Event data size: "+QString::number(ResponseData.size()));
-            executeWriteToNotes("Get Event Data cmd received bytes: "+ResponseData.toHex(' ').toUpper());
+//            executeWriteToNotes("Get Event data size: "+QString::number(ResponseData.size()));
+//            executeWriteToNotes("Get Event Data cmd received bytes: "+ResponseData.toHex(' ').toUpper());
         }
         else if(buffer == QByteArray::fromHex("53 54 45 FF"))
         {
