@@ -457,18 +457,18 @@ private:
      double liveSamplePeriodUS = 1.0;
 
      // For Bias values reading from config.txt
-     double x1Bias = 344.9422;
-     double y1Bias = -456.826691;
-     double z1Bias = -510.136963;
+     double x1Bias = 217.794693;
+     double y1Bias =-295.523712;
+     double z1Bias = -49.9996033;
 
      double x2Bias = 1.65;
      double y2Bias = 1.65;
      double z2Bias = 1.65;
 
      // For Sensitivity
-     double x1Sensitivity = 0.001526;
-     double y1Sensitivity = 0.001526;
-     double z1Sensitivity = 0.001526;
+     double x1Sensitivity = 0.003052;
+     double y1Sensitivity = 0.003052;
+     double z1Sensitivity = 0.003052;
 
      double x2Sensitivity = 0.0025;
      double y2Sensitivity = 0.0025;
@@ -500,5 +500,8 @@ private:
 
      // Total pages current <-> get parameters relation
      quint32 totalPages = 0;
+
+
+
 };  
 #endif // MAINWINDOW_H

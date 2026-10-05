@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->spinBox_logTime->setRange(INT_MIN, INT_MAX);
     ui->spinBox_samplingfrequency->setRange(INT_MIN, INT_MAX);
+    ui->spinBox_threshold->setRange(INT_MIN, INT_MAX);
    // ui->spinBox_delayLog->setRange(INT_MIN, INT_MAX);
 
     ui->spinBox_fftStartTime->setRange(INT_MIN, INT_MAX);
@@ -2317,7 +2318,7 @@ void MainWindow::showGuiData(const QByteArray &byteArrayData)
         ui->spinBox_logTime->setValue(logTime);
 
         ui->spinBox_samplingfrequency->setValue(samplingFreq);
-        ui->doubleSpinBox_threshold->setValue(threshold);
+        ui->spinBox_threshold->setValue(threshold);
         // For Live Plot X-axis label
         this->accFrequency = samplingFreq;
 
@@ -2337,6 +2338,7 @@ void MainWindow::showGuiData(const QByteArray &byteArrayData)
         blinkWidget(ui->spinBox_logTime);
         blinkWidget(ui->spinBox_samplingfrequency);
         blinkWidget(ui->spinBox_unitNumber);
+        blinkWidget(ui->spinBox_threshold);
    //     blinkWidget(ui->spinBox_delayLog);
 
         if (requiredPages >= availablePages)
@@ -3500,31 +3502,17 @@ void MainWindow::processLivePacket(const QByteArray &payload)
 
         double z1f = (z1-z1Bias) * z1Sensitivity;
 
-//       ui->lineEdit_Ax_xVal->setText(QString::number(x1f));
-//       ui->lineEdit_Ay_yVal->setText(QString::number(y1f));
-//       ui->lineEdit_Az_zVal->setText(QString::number(z1f));
+        if(liveSampleNumber%7==0)
+        {
+
+        }
 
 
-
-        //  qDebug()<<"z value after sensitivity"<<z1f;
-      //  z1f = ( z1f - z1Bias ) / z1Sensitivity;
-
-//        double x2f = (x2 / 65535.0) * 5.12;
-//        x2f = ( x2f - x2Bias ) / x2Sensitivity;
-
-//        double y2f = (y2 / 65535.0) * 5.12;
-//        y2f = ( y2f - y2Bias ) / y2Sensitivity;
-
-//        double z2f = (z2 / 65535.0) * 5.12;
-//        z2f = ( z2f - z2Bias ) / z2Sensitivity;
 
         peakAx100 = qMax(peakAx100, x1f);
         peakAy100 = qMax(peakAy100, y1f);
         peakAz100 = qMax(peakAz100, z1f);
 
-//        peakAx500 = qMax(peakAx500, x2f);
-//        peakAy500 = qMax(peakAy500, y2f);
-//        peakAz500 = qMax(peakAz500, z2f);
 
         liveSampleNumber++;
 
@@ -4650,9 +4638,31 @@ void MainWindow::on_pushButton_openFiles_clicked()
 
         auto plotGraph =
                 [](QCustomPlot *plot,
-                const QVector<double> &x,
-                const QVector<double> &y)
+                   const QVector<double> &x,
+                   const QVector<double> &y)
         {
+            QVector<double>B = {
+                3.405377e-4,
+                2.043226e-3,
+                5.180865e-3,
+                6.810753e-3,
+                5.180865e-3,
+                2.043226e-3,
+                3.405377e-4
+            };
+
+
+            QVector<double> A = {
+                1.000000,
+                -3.579435,
+                5.658667,
+                -4.965415,
+                2.529495,
+                -7.052741e-1,
+                8.375648e-2
+            };
+             QVector<double> plotY(y.size(), 0.0);
+
             if(plot->graphCount() == 0 ||
                     x.isEmpty() ||
                     y.isEmpty())
@@ -4662,37 +4672,98 @@ void MainWindow::on_pushButton_openFiles_clicked()
 
             plot->setUpdatesEnabled(false);
 
-            plot->graph(0)
-                    ->data()
-                    ->clear();
+            plot->graph(0)->data()->clear();
+
+
+            for(int i = 0; i < y.size()-7; i++)
+            {
+
+
+
+                double result =( B[0]*y[i+6]+B[1]*y[i+5]+B[2]*y[i+4]+B[3]*y[i+3]
+                        +B[4]*y[i+2]+B[5]*y[i+1]+B[6]*y[i])-
+                        (A[0]*plotY[i+5]+A[1]*plotY[i+4]+A[2]*plotY[i+3]+A[3]*plotY[i+2]
+                        +A[4]*plotY[i+1]+A[5]*plotY[i]);
+             //   qDebug()<<"result"<<result;
+
+
+                plotY[i]=result;
+
+
+            }
+
 
             constexpr int CHUNK_SIZE = 5000;
 
-            for(int i = 0;
-                i < x.size();
-                i += CHUNK_SIZE)
+            for(int i = 0; i < x.size(); i += CHUNK_SIZE)
             {
                 int count =
                         qMin(CHUNK_SIZE,
                              x.size() - i);
 
                 plot->graph(0)->addData(
-                            x.mid(i, count),
-                            y.mid(i, count));
+                            x.mid(i,count),
+                            plotY.mid(i,count));
             }
 
             plot->xAxis->setRange(
                         x.first(),
                         x.last());
 
-            plot->graph(0)
-                    ->rescaleValueAxis();
+            plot->graph(0)->rescaleValueAxis();
 
             plot->setUpdatesEnabled(true);
 
             plot->replot(
                         QCustomPlot::rpQueuedReplot);
         };
+
+//            QVector<double> plotX(x.size(), 0.0);
+//            QVector<double> plotY(y.size(), 0.0);
+
+//            if(y.size() >= WINDOW_SIZE )
+//            {
+      //          double currentSum = 0.0;
+                //double sum1=0.0;
+
+                // First 6 values
+//                for(int i = 0; i < WINDOW_SIZE; ++i)
+//                {
+//                    currentSum +=(B[6-i]* y[i]);
+//                }
+//                for(int i = 0; i < WINDOW_SIZE-1; ++i)
+//                {
+//                    sum1+=(A[6-i]* plotY[i]);
+//                }
+
+              //  double previousSum = currentSum;
+
+                // Start from 7th value
+           //     for(int i = 0; i < y.size()-7; i++)
+            //    {
+                    // Remove oldest value
+                   // currentSum -= y[i - WINDOW_SIZE];
+
+                    // Add newest value
+                 //   currentSum += (By[i]);
+
+                    // Current 6-sample sum - previous 6-sample sum
+//                    double result =( B[0]*y[i+6]+B[1]*y[i+5]+B[2]*y[i+4]+B[3]*y[i+3]
+//                                    +B[4]*y[i+2]+B[5]*y[i+1]+B[6]*y[i])-
+//                            (A[0]*plotY[i+5]+A[1]*plotY[i+4]+A[2]*plotY[i+3]+A[3]*plotY[i+2]
+//                            +A[4]*plotY[i+1]+A[5]*plotY[i]);
+//                    qDebug()<<"result"<<result;
+
+
+//                    plotY[i]=result;
+                   // plotX.append(x[i]);
+
+                    // Current becomes previous for next iteration
+                  //  previousSum = currentSum;
+           //     }
+        //    }
+
+
 
         //------------------------------------------------
         // ADXL #1
@@ -4973,9 +5044,10 @@ void MainWindow::on_pushButton_setCurrentParameters_clicked()
     command.append(
         static_cast<quint8>(delayTime & 0xFF));          // 17
 
-    quint16 threshold = ui->doubleSpinBox_threshold->value();
+    quint16 threshold = ui->spinBox_threshold->value();
+
+    command.append(static_cast<quint8>(threshold & 0xFF));//LSB 6
     command.append(static_cast<quint8>((threshold >> 8) & 0xFF)); //MSB 5
-    command.append(static_cast<quint8>(threshold & 0xFF)); //LSB 6
 
 
     command.append(static_cast<quint8>(0xEE));           // 18

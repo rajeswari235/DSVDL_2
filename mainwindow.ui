@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="icons.qrc">
+   <iconset>
     <normaloff>:/new/prefix1/logoIcon.ico</normaloff>:/new/prefix1/logoIcon.ico</iconset>
   </property>
   <property name="layoutDirection">
@@ -146,6 +146,83 @@
       </layout>
      </widget>
     </item>
+    <item row="2" column="0">
+     <widget class="QGroupBox" name="groupBox_4">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="title">
+       <string>Log data</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0" rowspan="3">
+        <widget class="QTextEdit" name="textEdit_rawBytes">
+         <property name="styleSheet">
+          <string notr="true">border : none;</string>
+         </property>
+         <property name="acceptRichText">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="pushButton_clear">
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Clear</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QCustomPlot" name="customPlot_new_Temp_live" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>100</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QCustomPlot" name="customPlot_new_Temp" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>100</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="font">
@@ -166,7 +243,7 @@
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -218,7 +295,7 @@
              <property name="title">
               <string>Initial Parameters</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_10">
+             <layout class="QVBoxLayout" name="verticalLayout_11">
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_5">
                 <item>
@@ -439,7 +516,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_threshold">
+                 <widget class="QSpinBox" name="spinBox_threshold">
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -450,18 +527,6 @@
                    <font>
                     <pointsize>10</pointsize>
                    </font>
-                  </property>
-                  <property name="toolTip">
-                   <string>Range 0-255</string>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true"/>
-                  </property>
-                  <property name="readOnly">
-                   <bool>true</bool>
-                  </property>
-                  <property name="buttonSymbols">
-                   <enum>QAbstractSpinBox::NoButtons</enum>
                   </property>
                  </widget>
                 </item>
@@ -481,8 +546,8 @@
                </spacer>
               </item>
               <item>
-               <layout class="QGridLayout" name="gridLayout_17">
-                <item row="0" column="0">
+               <layout class="QVBoxLayout" name="verticalLayout_10">
+                <item>
                  <layout class="QHBoxLayout" name="horizontalLayout_30">
                   <item>
                    <widget class="QLabel" name="label_31">
@@ -504,28 +569,22 @@
                       <height>35</height>
                      </size>
                     </property>
+                    <property name="sizeIncrement">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
                     <property name="font">
                      <font>
                       <pointsize>10</pointsize>
                      </font>
                     </property>
-                    <property name="toolTip">
-                     <string>Range 0-255</string>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true"/>
-                    </property>
-                    <property name="readOnly">
-                     <bool>true</bool>
-                    </property>
-                    <property name="buttonSymbols">
-                     <enum>QAbstractSpinBox::NoButtons</enum>
-                    </property>
                    </widget>
                   </item>
                  </layout>
                 </item>
-                <item row="1" column="0">
+                <item>
                  <widget class="QProgressBar" name="progressBar_storage">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -543,7 +602,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="0">
+                <item>
                  <spacer name="verticalSpacer_8">
                   <property name="orientation">
                    <enum>Qt::Vertical</enum>
@@ -2151,83 +2210,6 @@
       </widget>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QGroupBox" name="groupBox_4">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="title">
-       <string>Log data</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0" rowspan="3">
-        <widget class="QTextEdit" name="textEdit_rawBytes">
-         <property name="styleSheet">
-          <string notr="true">border : none;</string>
-         </property>
-         <property name="acceptRichText">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QPushButton" name="pushButton_clear">
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>Clear</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QCustomPlot" name="customPlot_new_Temp_live" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>100</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QCustomPlot" name="customPlot_new_Temp" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>100</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
    </layout>
    <zorder>tabWidget</zorder>
    <zorder>groupBox_4</zorder>
@@ -2253,8 +2235,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="icons.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
