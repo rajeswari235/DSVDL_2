@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="icons.qrc">
     <normaloff>:/new/prefix1/logoIcon.ico</normaloff>:/new/prefix1/logoIcon.ico</iconset>
   </property>
   <property name="layoutDirection">
@@ -597,6 +597,9 @@
                     <pointsize>10</pointsize>
                    </font>
                   </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
                   <property name="value">
                    <number>0</number>
                   </property>
@@ -636,7 +639,7 @@
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_3">
                  <item>
-                  <widget class="QCheckBox" name="checkBox_powerOnLog">
+                  <widget class="QRadioButton" name="radioButton_powerOnLog">
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
@@ -655,7 +658,7 @@
                     </font>
                    </property>
                    <property name="text">
-                    <string>Ext Trigger</string>
+                    <string>Threshold Trigger</string>
                    </property>
                   </widget>
                  </item>
@@ -1914,7 +1917,7 @@
                   </font>
                  </property>
                  <property name="text">
-                  <string>Acc</string>
+                  <string>Acc (g)</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1976,7 +1979,7 @@
                 </font>
                </property>
                <property name="text">
-                <string>Y_Range (min,max)</string>
+                <string>Set Y-axis Range (min,max)</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -2235,6 +2238,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

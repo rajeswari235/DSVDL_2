@@ -1,7 +1,8 @@
 Ver1.0----------------------------------------------------------
 
 
-->Dsvdl code taken and changed to 3 channels instead of 6.
+
+\->Dsvdl code taken and changed to 3 channels instead of 6.
 
 
 
@@ -19,6 +20,6 @@ Ver1.2----------------------------------------------------------
 
 
 \->Filter is applied to Openfiles plot.
-
-
+Ver1.3-----------------------------------------------------------
+->filter formula modified.
 

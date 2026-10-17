@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->dateTimeEdit->setDateTime(QDateTime(QDate(2026, 7, 1),
                                             QTime(0, 0, 0)));
 
-    ui->radioButton_GPIO->hide();
+   // ui->radioButton_GPIO->hide();
     ui->radioButton_delayLog->hide();
     ui->spinBox_delayLog->hide();
 
@@ -127,6 +127,7 @@ MainWindow::MainWindow(QWidget *parent)
                     .arg(mb, 0, 'f', 0));
     });
 
+    ui->checkBox_oscilloscopeMode->hide();
 
     writeToNotes("Pointer Size: "+QString::number(sizeof(void *))+" If it is 8 : 64 bit else 4 means 32 bit");
 
@@ -1734,7 +1735,7 @@ void MainWindow::portStatus(const QString &data)
             QMessageBox::information(this,"Success",data);
         });
 
-        //internal_configCommand();
+        internal_configCommand();
 
         batteryTimer->start(3000);
     }
@@ -2327,10 +2328,10 @@ void MainWindow::showGuiData(const QByteArray &byteArrayData)
      //   ui->spinBox_delayLog->setValue(delayTime);
 
         if(loginMode == static_cast<quint8>(0xAB))
-            ui->checkBox_powerOnLog->setChecked(true);
+            ui->radioButton_powerOnLog->setChecked(true);
 
-//        if(loginMode == static_cast<quint8>(0xAF))
-//            ui->radioButton_GPIO->setChecked(true);
+        if(loginMode == static_cast<quint8>(0xAF))
+            ui->radioButton_GPIO->setChecked(true);
 
 //        if(loginMode == static_cast<quint8>(0xAE))
 //            ui->radioButton_delayLog->setChecked(true);
@@ -2729,7 +2730,7 @@ void MainWindow::on_pushButton_getEventData_clicked()
     loadedCsvData = CsvPlotData();
 
 
-    //internal_configCommand();
+    internal_configCommand();
 
     pauseFor(100);
 
@@ -4340,7 +4341,7 @@ void MainWindow::on_pushButton_startLive_clicked()
     //Clearing previous peak values
     clearPeakValues();
 
-   // internal_configCommand();
+    internal_configCommand();
 
     pauseFor(100);
 
@@ -4636,12 +4637,94 @@ void MainWindow::on_pushButton_openFiles_clicked()
         // Plot Helper
         //------------------------------------------------
 
+//        auto plotGraph =
+//                [](QCustomPlot *plot,
+//                   const QVector<double> &x,
+//                   const QVector<double> &y)
+//        {
+//            QVector<double>B = {
+//                3.405377e-4,
+//                2.043226e-3,
+//                5.180865e-3,
+//                6.810753e-3,
+//                5.180865e-3,
+//                2.043226e-3,
+//                3.405377e-4
+//            };
+
+
+//            QVector<double> A = {
+//                1.000000,
+//                -3.579435,
+//                5.658667,
+//                -4.965415,
+//                2.529495,
+//                -7.052741e-1,
+//                8.375648e-2
+//            };
+//             QVector<double> plotY(y.size(), 0.0);
+
+//            if(plot->graphCount() == 0 ||
+//                    x.isEmpty() ||
+//                    y.isEmpty())
+//            {
+//                return;
+//            }
+
+//            plot->setUpdatesEnabled(false);
+
+//            plot->graph(0)->data()->clear();
+
+
+//            for(int i = 0; i < y.size()-7; i++)
+//            {
+
+
+
+//                double result =( B[0]*y[i+6]+B[1]*y[i+5]+B[2]*y[i+4]+B[3]*y[i+3]
+//                        +B[4]*y[i+2]+B[5]*y[i+1]+B[6]*y[i])-
+//                        (A[0]*plotY[i+5]+A[1]*plotY[i+4]+A[2]*plotY[i+3]+A[3]*plotY[i+2]
+//                        +A[4]*plotY[i+1]+A[5]*plotY[i]);
+//             //   qDebug()<<"result"<<result;
+
+
+//                plotY[i]=result;
+
+
+//            }
+
+
+//            constexpr int CHUNK_SIZE = 5000;
+
+//            for(int i = 0; i < x.size(); i += CHUNK_SIZE)
+//            {
+//                int count =
+//                        qMin(CHUNK_SIZE,
+//                             x.size() - i);
+
+//                plot->graph(0)->addData(
+//                            x.mid(i,count),
+//                            plotY.mid(i,count));
+//            }
+
+//            plot->xAxis->setRange(
+//                        x.first(),
+//                        x.last());
+
+//            plot->graph(0)->rescaleValueAxis();
+
+//            plot->setUpdatesEnabled(true);
+
+//            plot->replot(
+//                        QCustomPlot::rpQueuedReplot);
+//        };
+
         auto plotGraph =
                 [](QCustomPlot *plot,
                    const QVector<double> &x,
                    const QVector<double> &y)
         {
-            QVector<double>B = {
+            QVector<double> B = {
                 3.405377e-4,
                 2.043226e-3,
                 5.180865e-3,
@@ -4650,7 +4733,6 @@ void MainWindow::on_pushButton_openFiles_clicked()
                 2.043226e-3,
                 3.405377e-4
             };
-
 
             QVector<double> A = {
                 1.000000,
@@ -4661,7 +4743,8 @@ void MainWindow::on_pushButton_openFiles_clicked()
                 -7.052741e-1,
                 8.375648e-2
             };
-             QVector<double> plotY(y.size(), 0.0);
+
+            QVector<double> plotY(y.size(), 0.0);
 
             if(plot->graphCount() == 0 ||
                     x.isEmpty() ||
@@ -4671,39 +4754,38 @@ void MainWindow::on_pushButton_openFiles_clicked()
             }
 
             plot->setUpdatesEnabled(false);
-
             plot->graph(0)->data()->clear();
 
-
-            for(int i = 0; i < y.size()-7; i++)
+            // --- FIXED CAUSAL FILTER LOOP ---
+            // Start at index 6 to leave room for 6 past history samples
+            for(int i = 6 ; i < y.size(); i++)
             {
+                double result = (
+                                  // Feedforward part (current and past inputs)
+                                  B[0]*y[i]   + B[1]*y[i-1] + B[2]*y[i-2] +
+                                  B[3]*y[i-3] + B[4]*y[i-4] + B[5]*y[i-5] + B[6]*y[i-6]
+                                )
+                                -
+                                (
+                                  // Feedback part (past outputs, using A[1] through A[6])
+                                  // Note: A[0] is 1.0, so it scales the current output y[i]
+                                  A[1]*plotY[i-1] + A[2]*plotY[i-2] + A[3]*plotY[i-3] +
+                                  A[4]*plotY[i-4] + A[5]*plotY[i-5] + A[6]*plotY[i-6]
+                                );
 
-
-
-                double result =( B[0]*y[i+6]+B[1]*y[i+5]+B[2]*y[i+4]+B[3]*y[i+3]
-                        +B[4]*y[i+2]+B[5]*y[i+1]+B[6]*y[i])-
-                        (A[0]*plotY[i+5]+A[1]*plotY[i+4]+A[2]*plotY[i+3]+A[3]*plotY[i+2]
-                        +A[4]*plotY[i+1]+A[5]*plotY[i]);
-             //   qDebug()<<"result"<<result;
-
-
-                plotY[i]=result;
-
-
+                plotY[i] = result / A[0]; // Division by A[0] (which is 1.0 here)
             }
-
+            // ---------------------------------
 
             constexpr int CHUNK_SIZE = 5000;
 
             for(int i = 0; i < x.size(); i += CHUNK_SIZE)
             {
-                int count =
-                        qMin(CHUNK_SIZE,
-                             x.size() - i);
+                int count = qMin(CHUNK_SIZE, x.size() - i);
 
                 plot->graph(0)->addData(
-                            x.mid(i,count),
-                            plotY.mid(i,count));
+                            x.mid(i, count),
+                            plotY.mid(i, count)); // Plots the filtered output
             }
 
             plot->xAxis->setRange(
@@ -4714,8 +4796,7 @@ void MainWindow::on_pushButton_openFiles_clicked()
 
             plot->setUpdatesEnabled(true);
 
-            plot->replot(
-                        QCustomPlot::rpQueuedReplot);
+            plot->replot(QCustomPlot::rpQueuedReplot);
         };
 
 //            QVector<double> plotX(x.size(), 0.0);
@@ -5011,15 +5092,15 @@ void MainWindow::on_pushButton_setCurrentParameters_clicked()
     command.append(static_cast<quint8>(year - 2000)); // if protocol needs 2-digit year 14
 
     quint8 mode = static_cast<quint8>(0x00);
-    if(ui->checkBox_powerOnLog->isChecked())
+    if(ui->radioButton_powerOnLog->isChecked())
     {
         mode = 0xAB;
     }
 
-//    if(ui->radioButton_GPIO->isChecked())
-//    {
-//        mode = 0xAF;
-//    }
+    if(ui->radioButton_GPIO->isChecked())
+    {
+        mode = 0xAF;
+    }
 
 //    if(ui->radioButton_delayLog->isChecked())
 //    {
@@ -5046,8 +5127,8 @@ void MainWindow::on_pushButton_setCurrentParameters_clicked()
 
     quint16 threshold = ui->spinBox_threshold->value();
 
-    command.append(static_cast<quint8>(threshold & 0xFF));//LSB 6
     command.append(static_cast<quint8>((threshold >> 8) & 0xFF)); //MSB 5
+    command.append(static_cast<quint8>(threshold & 0xFF)); //LSB 6
 
 
     command.append(static_cast<quint8>(0xEE));           // 18
@@ -5850,9 +5931,9 @@ void MainWindow::loadAdxlBiasValues(
     qDebug() << "Y1:" << y1Bias;
     qDebug() << "Z1:" << z1Bias;
 
-    qDebug() << "X2:" << x2Bias;
-    qDebug() << "Y2:" << y2Bias;
-    qDebug() << "Z2:" << z2Bias;
+//    qDebug() << "X2:" << x2Bias;
+//    qDebug() << "Y2:" << y2Bias;
+//    qDebug() << "Z2:" << z2Bias;
 
 
     qDebug() << "ADXL Sensitivity Values Received:";
@@ -5861,9 +5942,9 @@ void MainWindow::loadAdxlBiasValues(
     qDebug() << "Y1:" << y1Sensitivity;
     qDebug() << "Z1:" << z1Sensitivity;
 
-    qDebug() << "X2:" << x2Sensitivity;
-    qDebug() << "Y2:" << y2Sensitivity;
-    qDebug() << "Z2:" << z2Sensitivity;
+//    qDebug() << "X2:" << x2Sensitivity;
+//    qDebug() << "Y2:" << y2Sensitivity;
+//    qDebug() << "Z2:" << z2Sensitivity;
 
 
     //------------------------------------------------
