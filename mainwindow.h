@@ -306,6 +306,8 @@ private slots:
 
        void on_tabWidget_currentChanged(int index);
 
+       void on_checkBox_All_clicked(bool checked);
+
 signals:
     void sendMsgId(quint8 id);
 
@@ -475,9 +477,9 @@ private:
      double z2Sensitivity = 0.0025;
 
      // For Peak Detection
-     double peakAx100 = std::numeric_limits<double>::lowest();
-     double peakAy100 = std::numeric_limits<double>::lowest();
-     double peakAz100 = std::numeric_limits<double>::lowest();
+     double peakAx100 ;
+     double peakAy100 ;
+     double peakAz100 ;
 
      double peakAx500 = std::numeric_limits<double>::lowest();
      double peakAy500 = std::numeric_limits<double>::lowest();

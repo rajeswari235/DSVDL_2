@@ -86,7 +86,7 @@ enlargePlot::enlargePlot(QWidget *parent) :
         // ---- CREATE NEW (x,y) LABEL ----
         QCPItemText *lb = new QCPItemText(ui->customPlot_enlarge);
 
-        lb->setText(QString("x: %1\ny: %2")
+        lb->setText(QString("x: %1 g\ny: %2 μs")
                     .arg(x, 0, 'f', 3)
                     .arg(y, 0, 'f', 3));
 

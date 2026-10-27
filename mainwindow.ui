@@ -73,7 +73,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Dual Sensor Vibration Data Logger</string>
+          <string>Envirologger</string>
          </property>
         </widget>
        </item>
@@ -227,13 +227,21 @@
      <widget class="QTabWidget" name="tabWidget">
       <property name="font">
        <font>
-        <pointsize>10</pointsize>
+        <pointsize>11</pointsize>
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">QTabBar::tab:selected {
-    background-color : rgb(132, 255, 130); 
+       <string notr="true">QTabBar::tab {
+    font-weight: bold;
+ 
+    min-width: 90px;
+    min-height: 20px;
+}
+
+QTabBar::tab:selected {
+    background-color: rgb(132, 255, 130);
     color: rgb(0, 0, 0);
+
 }</string>
       </property>
       <property name="tabPosition">
@@ -244,6 +252,12 @@
       </property>
       <property name="currentIndex">
        <number>1</number>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>16</width>
+        <height>16</height>
+       </size>
       </property>
       <property name="elideMode">
        <enum>Qt::ElideNone</enum>
@@ -285,6 +299,7 @@
              </property>
              <property name="font">
               <font>
+               <pointsize>11</pointsize>
                <weight>75</weight>
                <bold>true</bold>
               </font>
@@ -295,7 +310,23 @@
              <property name="title">
               <string>Initial Parameters</string>
              </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
              <layout class="QVBoxLayout" name="verticalLayout_11">
+              <item>
+               <spacer name="verticalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_5">
                 <item>
@@ -303,6 +334,8 @@
                   <property name="font">
                    <font>
                     <pointsize>10</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
                    </font>
                   </property>
                   <property name="text">
@@ -368,10 +401,12 @@
                   <property name="font">
                    <font>
                     <pointsize>10</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
                    </font>
                   </property>
                   <property name="text">
-                   <string>RTC Time</string>
+                   <string>RTC Date &amp; Time</string>
                   </property>
                  </widget>
                 </item>
@@ -421,6 +456,8 @@
                   <property name="font">
                    <font>
                     <pointsize>10</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
                    </font>
                   </property>
                   <property name="text">
@@ -443,6 +480,9 @@
                   </property>
                   <property name="styleSheet">
                    <string notr="true"/>
+                  </property>
+                  <property name="suffix">
+                   <string> Hz</string>
                   </property>
                  </widget>
                 </item>
@@ -468,10 +508,12 @@
                   <property name="font">
                    <font>
                     <pointsize>10</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
                    </font>
                   </property>
                   <property name="text">
-                   <string>Unit No</string>
+                   <string>Unit S.No</string>
                   </property>
                  </widget>
                 </item>
@@ -508,6 +550,8 @@
                   <property name="font">
                    <font>
                     <pointsize>10</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
                    </font>
                   </property>
                   <property name="text">
@@ -527,6 +571,9 @@
                    <font>
                     <pointsize>10</pointsize>
                    </font>
+                  </property>
+                  <property name="suffix">
+                   <string> g</string>
                   </property>
                  </widget>
                 </item>
@@ -554,6 +601,8 @@
                     <property name="font">
                      <font>
                       <pointsize>10</pointsize>
+                      <weight>75</weight>
+                      <bold>true</bold>
                      </font>
                     </property>
                     <property name="text">
@@ -634,15 +683,33 @@
                   <height>94</height>
                  </size>
                 </property>
+                <property name="font">
+                 <font>
+                  <pointsize>11</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
+                <property name="title">
+                 <string>Logging Mode</string>
+                </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_3">
+                 <property name="topMargin">
+                  <number>25</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>12</number>
+                 </property>
                  <item>
                   <widget class="QRadioButton" name="radioButton_powerOnLog">
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
                     </font>
                    </property>
                    <property name="text">
@@ -655,6 +722,8 @@
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
                     </font>
                    </property>
                    <property name="text">
@@ -667,6 +736,8 @@
                    <property name="font">
                     <font>
                      <pointsize>10</pointsize>
+                     <weight>75</weight>
+                     <bold>true</bold>
                     </font>
                    </property>
                    <property name="text">
@@ -962,8 +1033,8 @@
        <attribute name="title">
         <string>Logger</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_12">
-        <item row="0" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_17">
+        <item>
          <widget class="QGroupBox" name="customGroupBoxs">
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -1018,7 +1089,7 @@
           </layout>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item>
          <widget class="QGroupBox" name="groupBox_parameters">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
@@ -1039,27 +1110,55 @@
 }
 </string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_4">
-           <item row="0" column="0" colspan="3">
-            <widget class="QLineEdit" name="lineEdit_enterEventId">
+          <layout class="QVBoxLayout" name="verticalLayout_12">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_16">
+             <item>
+              <widget class="QLabel" name="label_15">
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Enter Event Id</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="lineEdit_enterEventId">
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
+               <property name="toolTip">
+                <string>Enter Event Id Example  : 2</string>
+               </property>
+               <property name="placeholderText">
+                <string/>
+               </property>
+               <property name="clearButtonEnabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_getEventData">
              <property name="font">
               <font>
-               <pointsize>10</pointsize>
+               <pointsize>11</pointsize>
               </font>
              </property>
-             <property name="toolTip">
-              <string>Enter Event Id Example  : 2</string>
-             </property>
-             <property name="placeholderText">
-              <string>Enter Event Id</string>
-             </property>
-             <property name="clearButtonEnabled">
-              <bool>false</bool>
+             <property name="text">
+              <string>Get Event Data</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="1">
-            <spacer name="verticalSpacer_2">
+           <item>
+            <spacer name="verticalSpacer_14">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
@@ -1071,7 +1170,7 @@
              </property>
             </spacer>
            </item>
-           <item row="2" column="0" colspan="3">
+           <item>
             <layout class="QVBoxLayout" name="verticalLayout">
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_27">
@@ -1180,43 +1279,20 @@
              </item>
             </layout>
            </item>
-           <item row="1" column="0" colspan="3">
-            <widget class="QPushButton" name="pushButton_getEventData">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
+           <item>
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
              </property>
-             <property name="text">
-              <string>Get Event Data</string>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
              </property>
-            </widget>
+            </spacer>
            </item>
-           <item row="10" column="0">
-            <widget class="QLabel" name="label_csv">
-             <property name="font">
-              <font>
-               <pointsize>10</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Status</string>
-             </property>
-            </widget>
-           </item>
-           <item row="9" column="0" colspan="3">
-            <widget class="QPushButton" name="pushButton_openFiles">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Open Files</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0" colspan="3">
+           <item>
             <layout class="QVBoxLayout" name="verticalLayout_4">
              <item>
               <widget class="QLabel" name="label_23">
@@ -1348,7 +1424,72 @@
              </item>
             </layout>
            </item>
-           <item row="8" column="0" colspan="3">
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_5">
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Plot Settings</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_31">
+             <item>
+              <widget class="QComboBox" name="comboBox_enlargePlot">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Ax</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Ay</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Az</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_enlargePlot">
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Enlarge Plot</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
             <layout class="QHBoxLayout" name="horizontalLayout_32">
              <item>
               <widget class="QPushButton" name="pushButton_fitToScreen">
@@ -1388,70 +1529,29 @@
              </item>
             </layout>
            </item>
-           <item row="6" column="0">
-            <widget class="QLabel" name="label_5">
+           <item>
+            <widget class="QPushButton" name="pushButton_openFiles">
+             <property name="font">
+              <font>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Open Files</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_csv">
              <property name="font">
               <font>
                <pointsize>10</pointsize>
               </font>
              </property>
              <property name="text">
-              <string>Plot Settings</string>
+              <string>Status</string>
              </property>
             </widget>
-           </item>
-           <item row="3" column="1">
-            <spacer name="verticalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="7" column="0" colspan="3">
-            <layout class="QHBoxLayout" name="horizontalLayout_31">
-             <item>
-              <widget class="QComboBox" name="comboBox_enlargePlot">
-               <property name="font">
-                <font>
-                 <pointsize>11</pointsize>
-                </font>
-               </property>
-               <item>
-                <property name="text">
-                 <string>Ax</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Ay</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>Az</string>
-                </property>
-               </item>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="pushButton_enlargePlot">
-               <property name="font">
-                <font>
-                 <pointsize>11</pointsize>
-                </font>
-               </property>
-               <property name="text">
-                <string>Enlarge Plot</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
            </item>
           </layout>
          </widget>
@@ -1549,7 +1649,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>FFT Duration (Start,End in Us) Note : 0,0 loads all data</string>
+                   <string>FFT Duration (Start,End in μs) Note : 0,0 loads all data</string>
                   </property>
                  </widget>
                 </item>
@@ -1560,6 +1660,9 @@
                     <pointsize>11</pointsize>
                    </font>
                   </property>
+                  <property name="suffix">
+                   <string> μs</string>
+                  </property>
                  </widget>
                 </item>
                 <item>
@@ -1568,6 +1671,9 @@
                    <font>
                     <pointsize>11</pointsize>
                    </font>
+                  </property>
+                  <property name="suffix">
+                   <string> μs</string>
                   </property>
                  </widget>
                 </item>
@@ -1858,18 +1964,6 @@
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QPushButton" name="pushButton_startLive">
-                 <property name="font">
-                  <font>
-                   <pointsize>11</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Start Plot</string>
-                 </property>
-                </widget>
-               </item>
               </layout>
              </item>
             </layout>
@@ -1887,7 +1981,7 @@
             </widget>
            </item>
            <item>
-            <spacer name="verticalSpacer_9">
+            <spacer name="verticalSpacer_13">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
@@ -1902,6 +1996,30 @@
            <item>
             <layout class="QGridLayout" name="gridLayout_9">
              <item row="1" column="0">
+              <widget class="QLabel" name="label_12">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Set Y-axis Range (min,max)</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
               <layout class="QHBoxLayout" name="horizontalLayout_13">
                <item>
                 <widget class="QLabel" name="label_13">
@@ -1965,34 +2083,125 @@
                </item>
               </layout>
              </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_12">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="font">
-                <font>
-                 <pointsize>10</pointsize>
-                </font>
-               </property>
-               <property name="text">
-                <string>Set Y-axis Range (min,max)</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignCenter</set>
-               </property>
-               <property name="wordWrap">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
+             <item row="3" column="0">
               <layout class="QHBoxLayout" name="horizontalLayout_15"/>
              </item>
             </layout>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_9">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_startLive">
+             <property name="font">
+              <font>
+               <pointsize>-1</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #81C784,
+        stop:1 #43A047
+    );
+
+    color: white;
+    border: 1px solid #388E3C;
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #A5D6A7,
+        stop:1 #66BB6A
+    );
+
+    border: 1px solid #2E7D32;
+}
+
+QPushButtont:pressed {
+    background: #388E3C;
+    padding-top: 12px;
+    padding-bottom: 8px;
+}
+
+QPushButton:disabled {
+    background: #C8DCC9;
+    color: #F5F5F5;
+    border: 1px solid #B0C4B1;
+}</string>
+             </property>
+             <property name="text">
+              <string>Start Plot</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_stopLivePlot">
+             <property name="font">
+              <font>
+               <pointsize>-1</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #EF5350,
+        stop:1 #C62828
+    );
+    color: white;
+    border: 1px solid #A61F1F;
+    border-radius: 10px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #FF6B65,
+        stop:1 #E53935
+    );
+    border: 1px solid #941B1B;
+}
+
+QPushButton:pressed {
+    background: #A61F1F;
+    padding-top: 12px;
+    padding-bottom: 8px;
+}
+
+QPushButton:disabled {
+    background: #D6B8B8;
+    color: #F7EEEE;
+    border: 1px solid #C7AAAA;
+}</string>
+             </property>
+             <property name="text">
+              <string>Stop Plot</string>
+             </property>
+            </widget>
            </item>
            <item>
             <spacer name="verticalSpacer_10">
@@ -2174,8 +2383,42 @@
             <widget class="QPushButton" name="pushButton_clearLivePlots">
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <pointsize>-1</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #FFE082,
+        stop:1 #FFB300
+    );
+
+    color: #3E3420;
+    border: 1px solid #E6A000;
+    border-radius: 10px;
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #FFECB3,
+        stop:1 #FFCA28
+    );
+
+    border: 1px solid #D99A00;
+}
+
+QPushButton:pressed {
+    background: #E6A000;
+    padding-top: 11px;
+    padding-bottom: 7px;
+}</string>
              </property>
              <property name="text">
               <string>Clear Plots and Peaks</string>
@@ -2183,23 +2426,51 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_stopLivePlot">
-             <property name="font">
-              <font>
-               <pointsize>11</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>Stop Plot</string>
-             </property>
-            </widget>
-           </item>
-           <item>
             <widget class="QPushButton" name="pushButton_fitToScreenLive">
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
+               <pointsize>-1</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton{
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #B39DDB,
+        stop:1 #7E57C2
+    );
+
+    color: white;
+    border: 1px solid #673AB7;
+    border-radius: 10px;
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #D1C4E9,
+        stop:1 #9575CD
+    );
+
+    border: 1px solid #5E35B1;
+}
+
+QPushButton:pressed {
+    background: #673AB7;
+    padding-top: 11px;
+    padding-bottom: 7px;
+}
+
+QPushButton:disabled {
+    background: #D1C8DF;
+    color: #F5F2F8;
+    border: 1px solid #BDB2CC;
+}</string>
              </property>
              <property name="text">
               <string>Fit To Screen</string>

@@ -131,7 +131,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     writeToNotes("Pointer Size: "+QString::number(sizeof(void *))+" If it is 8 : 64 bit else 4 means 32 bit");
 
-    setWindowTitle("DSVDL");
+    setWindowTitle("Envirologger");
 
     showMaximized();
 
@@ -148,8 +148,11 @@ MainWindow::MainWindow(QWidget *parent)
     qDebug() << ui->customPlot_new_Temp->size();
     qDebug() << ui->customPlot_new_Temp_live->size();
     // Hiding Temperature Plot Stop -----------------------------------------
+    qDebug()<<"before intializing plots";
 
     initializeAllPlots();
+
+     qDebug()<<"after intializing plots";
 
     // ============================================================
     // FFT PLOTS
@@ -868,7 +871,7 @@ void MainWindow::initializeAllPlots()
 
     QString adxlFreqLabel;
 
-    adxlFreqLabel = "Time (us)";
+    adxlFreqLabel = "Time (µs)";
 
     // ============================================================
     // ADXL PLOTS
@@ -976,6 +979,7 @@ void MainWindow::initializeAllPlots()
     {
         plot->xAxis->setRange(0, 100);
         plot->yAxis->setRange(-5, 5);
+
         plot->replot();
     }
 
@@ -1044,7 +1048,10 @@ void MainWindow::initializeAllPlots()
     for(auto plot : livePlots)
     {
         plot->xAxis->setRange(0, LIVE_WINDOW);
+        plot->yAxis->setRange(-5, 5);
         plot->replot();
+
+
     }
 
 
@@ -1060,12 +1067,12 @@ void MainWindow::initializeAllPlots()
         double samplePeriodUS = 1000000.0 / accFrequency;
 
         adxlLiveFreqLabel =
-                QString("Sample Number (1 Sample = %1 µs)")
+                QString("(Time = %1 µs)")
                 .arg(samplePeriodUS, 0, 'f', 2);
     }
     else
     {
-        adxlLiveFreqLabel = "Sample Number";
+        adxlLiveFreqLabel =  "Time (µs)";
     }
 
     qDebug()<<adxlLiveFreqLabel<<" :adxlLiveFreqLabel";
@@ -1202,7 +1209,7 @@ void MainWindow::initializeAllPlots()
     plotPressure.fill(0.0, LIVE_WINDOW);
     displayPressure.fill(0.0, LIVE_WINDOW);
 
-    peakAx100 = peakAy100 = peakAz100 = std::numeric_limits<double>::lowest();
+    peakAx100 = peakAy100 = peakAz100 = 0;
     peakAx500 = peakAy500 = peakAz500 = std::numeric_limits<double>::lowest();
     peakPressure = std::numeric_limits<double>::lowest();
 
@@ -1242,8 +1249,19 @@ void MainWindow::makePacket32UI(QList<QByteArray> &rawPacket32List)
 
         QString adxlFreqLabel;
 
-        adxlFreqLabel = "Time (us)";
+        if(accFrequency>0)
+        {
+            double samplePeriodUS = 1000000.0 / accFrequency;
 
+            adxlFreqLabel =
+                    QString("(Time = %1 µs)")
+                    .arg(samplePeriodUS, 0, 'f', 2);
+        }
+        else
+        {
+
+        adxlFreqLabel = "Time (us)";
+        }
         // Updating x axis lables start -----------------------------
         setupPlot(ui->customPlot_adxl_x,
                   QString("%1").arg(adxlFreqLabel),
@@ -1663,9 +1681,23 @@ void MainWindow::makePacket2048AdxlTempListPressureList(
     this->finalSampleIndexNew = sampleIndex;
 
     //Peak Detection
-    double peakAx100 = *std::max_element(x1Adxl.begin(), x1Adxl.end());
-    double peakAy100 = *std::max_element(y1Adxl.begin(), y1Adxl.end());
-    double peakAz100 = *std::max_element(z1Adxl.begin(), z1Adxl.end());
+    double peakAx100 = *std::max_element(
+        x1Adxl.begin(), x1Adxl.end(),
+        [](double a, double b) {
+            return std::abs(a) < std::abs(b);
+        });
+
+    double peakAy100 = *std::max_element(
+        y1Adxl.begin(), y1Adxl.end(),
+        [](double a, double b) {
+            return std::abs(a) < std::abs(b);
+        });
+
+    double peakAz100 = *std::max_element(
+        z1Adxl.begin(), z1Adxl.end(),
+        [](double a, double b) {
+            return std::abs(a) < std::abs(b);
+        });
 
 //    double peakAx500 = *std::max_element(x2Adxl.begin(), x2Adxl.end());
 //    double peakAy500 = *std::max_element(y2Adxl.begin(), y2Adxl.end());
@@ -2265,7 +2297,7 @@ void MainWindow::showGuiData(const QByteArray &byteArrayData)
     //msg Id = 0x06
     else if (data.startsWith("PARAM"))
     {
-        QByteArray payload = data.mid(8, 22);
+        QByteArray payload = data.mid(8, 28);
 
         quint8 sNo = static_cast<quint8>(payload[0]);
 
@@ -2315,6 +2347,24 @@ void MainWindow::showGuiData(const QByteArray &byteArrayData)
                 (static_cast<quint8>(payload[20]) << 8) |
                 static_cast<quint8>(payload[21]);
 
+        quint8 hour =  static_cast<quint8>(payload[22]);
+        quint8 min  = static_cast<quint8>(payload[23]);
+        quint8 sec = static_cast<quint8>(payload[24]);
+        quint8 date =  static_cast<quint8>(payload[25]);
+        quint8 month  = static_cast<quint8>(payload[26]);
+        quint8 year = static_cast<quint8>(payload[27]);
+
+
+
+        QDate dateValue(2000 + year, month, date);
+        QTime timeValue(hour, min, sec);
+
+        QDateTime dateTime(dateValue, timeValue);
+
+        ui->dateTimeEdit->setDateTime(dateTime);
+
+
+
         ui->spinBox_unitNumber->setValue(sNo);
         ui->spinBox_logTime->setValue(logTime);
 
@@ -2340,6 +2390,7 @@ void MainWindow::showGuiData(const QByteArray &byteArrayData)
         blinkWidget(ui->spinBox_samplingfrequency);
         blinkWidget(ui->spinBox_unitNumber);
         blinkWidget(ui->spinBox_threshold);
+        blinkWidget(ui->dateTimeEdit);
    //     blinkWidget(ui->spinBox_delayLog);
 
         if (requiredPages >= availablePages)
@@ -2458,7 +2509,7 @@ void MainWindow::showGuiData(const QByteArray &byteArrayData)
     else if(data.startsWith("STOP_LIVE"))
     {
 
-        ui->pushButton_stopLivePlot->setText("Stopped");
+        //ui->pushButton_stopLivePlot->setText("Stopped");
         QTimer::singleShot(0, this, [this](){
             QMessageBox::information(this,"Success","CSV File generated on Desktop");
         });
@@ -3503,16 +3554,15 @@ void MainWindow::processLivePacket(const QByteArray &payload)
 
         double z1f = (z1-z1Bias) * z1Sensitivity;
 
-        if(liveSampleNumber%7==0)
-        {
 
-        }
+        if (qAbs(x1f) > qAbs(peakAx100))
+            peakAx100 = x1f;
 
+        if (qAbs(y1f) > qAbs(peakAy100))
+            peakAy100 = y1f;
 
-
-        peakAx100 = qMax(peakAx100, x1f);
-        peakAy100 = qMax(peakAy100, y1f);
-        peakAz100 = qMax(peakAz100, z1f);
+        if (qAbs(z1f) > qAbs(peakAz100))
+            peakAz100 = z1f;
 
 
         liveSampleNumber++;
@@ -5986,4 +6036,24 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     ui->lineEdit_eventId->setVisible(true);
     ui->lineEdit_startTime->setVisible(true);
     ui->lineEdit_endTime->setVisible(true);
+}
+
+void MainWindow::on_checkBox_All_clicked(bool checked)
+{
+    if(checked)
+    {
+        ui->checkBox_Ax_100->setChecked(false);
+        ui->checkBox_Ay_100->setChecked(false);
+        ui->checkBox_Az_100->setChecked(false);
+
+        ui->checkBox_Ax_100->setEnabled(false);
+        ui->checkBox_Ay_100->setEnabled(false);
+        ui->checkBox_Az_100->setEnabled(false);
+
+    }
+    else{
+        ui->checkBox_Ax_100->setEnabled(true);
+        ui->checkBox_Ay_100->setEnabled(true);
+        ui->checkBox_Az_100->setEnabled(true);
+    }
 }

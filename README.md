@@ -22,4 +22,8 @@ Ver1.2----------------------------------------------------------
 \->Filter is applied to Openfiles plot.
 Ver1.3-----------------------------------------------------------
 ->filter formula modified.
+Ver1.4-----------------------------------------------------------
+
+\->Project name changed from DSVDL to Envirologger.
+->ui changes,like adding colour,text bold.
 
