@@ -47,7 +47,7 @@ void serialPortHandler::setPORTNAME(const QString &portName)
     else
     {
         qDebug() << "Serial port "<<serial->portName()<<" opened successfully at baud rate 921600";
-        emit portOpening("Serial port "+serial->portName()+" opened successfully at baud rate 921600");
+        emit portOpening("Serial port "+serial->portName()+" opened successfully");
     }
 }
 QString serialPortHandler::detectDevicePort()

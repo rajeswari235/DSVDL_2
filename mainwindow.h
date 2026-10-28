@@ -145,8 +145,7 @@ public:
 
 
 
-            const QVector<double> &pressureIndex,
-            const QVector<double> &pressure,
+
 
             const QString &filePath);
 

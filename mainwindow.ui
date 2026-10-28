@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="icons.qrc">
+   <iconset resource="../ProjectHub/Contribute Projects/twelveChannelLogger/resource.qrc">
     <normaloff>:/new/prefix1/logoIcon.ico</normaloff>:/new/prefix1/logoIcon.ico</iconset>
   </property>
   <property name="layoutDirection">
@@ -251,7 +251,7 @@ QTabBar::tab:selected {
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="iconSize">
        <size>
@@ -1162,6 +1162,9 @@ QTabBar::tab:selected {
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
@@ -1333,7 +1336,7 @@ QTabBar::tab:selected {
                   </font>
                  </property>
                  <property name="text">
-                  <string>Ax        </string>
+                  <string>Ax (g)     </string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1367,7 +1370,7 @@ QTabBar::tab:selected {
                   </font>
                  </property>
                  <property name="text">
-                  <string>Ay        </string>
+                  <string>Ay (g)       </string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1401,7 +1404,7 @@ QTabBar::tab:selected {
                   </font>
                  </property>
                  <property name="text">
-                  <string>Az        </string>
+                  <string>Az (g)       </string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2154,6 +2157,22 @@ QPushButton:disabled {
             </widget>
            </item>
            <item>
+            <spacer name="verticalSpacer_15">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
             <widget class="QPushButton" name="pushButton_stopLivePlot">
              <property name="font">
               <font>
@@ -2257,7 +2276,7 @@ QPushButton:disabled {
                   </font>
                  </property>
                  <property name="text">
-                  <string>Ax </string>
+                  <string>Ax (g) </string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2297,7 +2316,7 @@ QPushButton:disabled {
                   </font>
                  </property>
                  <property name="text">
-                  <string>Ay </string>
+                  <string>Ay (g) </string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2337,7 +2356,7 @@ QPushButton:disabled {
                   </font>
                  </property>
                  <property name="text">
-                  <string>Az </string>
+                  <string>Az (g) </string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -2509,8 +2528,6 @@ QPushButton:disabled {
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="icons.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

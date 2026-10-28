@@ -26,4 +26,11 @@ Ver1.4-----------------------------------------------------------
 
 \->Project name changed from DSVDL to Envirologger.
 ->ui changes,like adding colour,text bold.
+Ver1.5,1.6-----------------------------------------------------------
+
+\->pressure col from excel is removed.
+Ver1.7----------------------------------------------------------------
+->baudrate on message is removed.
+->clearing events in get details button.
+
 

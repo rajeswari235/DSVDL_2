@@ -566,6 +566,7 @@ MainWindow::loadAdxlCsv(
         qDebug()<<"executing live csv";
         ui->lineEdit_enterEventId->setVisible(false);
         ui->pushButton_getEventData->setVisible(false);
+        ui->label_15->setVisible(false);
         ui->label_2->setVisible(false);
         ui->label_3->setVisible(false);
         ui->label_4->setVisible(false);
@@ -579,6 +580,7 @@ MainWindow::loadAdxlCsv(
         result.isDownloadedCsv = true;
         ui->lineEdit_enterEventId->setVisible(true);
         ui->pushButton_getEventData->setVisible(true);
+        ui->label_15->setVisible(true);
         ui->label_2->setVisible(true);
         ui->label_3->setVisible(true);
         ui->label_4->setVisible(true);
@@ -1761,7 +1763,7 @@ void MainWindow::portStatus(const QString &data)
         batteryTimer->stop();
     }
 
-    if(data.startsWith("Serial port ") && data.endsWith(" opened successfully at baud rate 921600"))
+    if(data.startsWith("Serial port ") && data.endsWith(" opened successfully"))
     {
         QTimer::singleShot(0, this, [this,data](){
             QMessageBox::information(this,"Success",data);
@@ -2880,9 +2882,11 @@ void MainWindow::on_pushButton_startLog_clicked()
 
 void MainWindow::on_pushButton_getLogEvents_clicked()
 {
+    on_pushButton_clearLogPlots_clicked();
 
     ui->lineEdit_enterEventId->setVisible(true);
     ui->pushButton_getEventData->setVisible(true);
+    ui->label_15->setVisible(true);
     ui->label_2->setVisible(true);
     ui->label_3->setVisible(true);
     ui->label_4->setVisible(true);
@@ -3364,8 +3368,7 @@ void MainWindow::startAdxlCsvSaving(
 
 
 
-                    finalPressureIndexNew,
-                    finalPressureNew,
+
 
                     csvPath);
     }));
@@ -3380,8 +3383,7 @@ bool MainWindow::saveAdxlToCsv(
 
 
 
-        const QVector<double> &pressureIndex,
-        const QVector<double> &pressure,
+
 
         const QString &filePath)
 {
@@ -3434,11 +3436,11 @@ bool MainWindow::saveAdxlToCsv(
             << "Time in (us),"
             << "Ax(g),"
             << "Ay(g),"
-            << "Az(g),"
+            << "Az(g)\n";
 //            << "Ax_500(g),"
 //            << "Ay_500(g),"
 //            << "Az_500(g),"
-            << "Pressure (mbar)\n";
+       //     << "Pressure (mbar)\n";
 
     //----------------------------------------------------
     // Combined Data
@@ -3460,10 +3462,7 @@ bool MainWindow::saveAdxlToCsv(
 
 
 
-        if(i < pressure.size())
-        {
-            out << pressure[i];
-        }
+
 
         out << "\n";
 
@@ -3786,9 +3785,9 @@ void MainWindow::startLiveCsv()
             << "Time(micro second),"
             << "Ax(g),"
             << "Ay(g),"
-            << "Az(g),"
+            << "Az(g)\n";
 
-            << "Pressure(mbar)\n";
+      //      << "Pressure(mbar)\n";
 
     liveCsvStream.flush();
 
@@ -3815,11 +3814,11 @@ void MainWindow::appendLiveCsv()
 
                 << liveCsvData.x1Loaded[i] << ","
                 << liveCsvData.y1Loaded[i] << ","
-                << liveCsvData.z1Loaded[i] << ","
+                << liveCsvData.z1Loaded[i]
 
 
 
-                << liveCsvData.pressureLoaded[i]
+             //   << liveCsvData.pressureLoaded[i]
 
                    << "\n";
     }
@@ -4358,6 +4357,7 @@ quint64 getCurrentProcessMemoryMB()
 void MainWindow::on_pushButton_stopLivePlot_clicked()
 {    
     responseTimer->start(2000);
+      ui->pushButton_startLive->setEnabled(true);
 
     //REGAINING BATTERY CONDITION AT READYREAD
     emit sendMsgId(253);
@@ -4381,7 +4381,7 @@ void MainWindow::on_pushButton_startLive_clicked()
         });
         return;
     }
-
+     ui->pushButton_startLive->setEnabled(false);
     //OMITTING BATTERY CONDITION AT READYREAD
     emit sendMsgId(254);
 
